@@ -11,7 +11,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cgpt vboot-kernel-utils unzip
+          sudo apt-get install -y cgpt vboot-kernel-utils unzip pv
 
       - name: Download recovery image
         run: |

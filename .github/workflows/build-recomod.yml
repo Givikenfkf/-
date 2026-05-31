@@ -1,0 +1,37 @@
+name: Build RecoMod E-Halcyon Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cgpt vboot-kernel-utils unzip
+
+      - name: Download recovery image
+        run: |
+          wget -q "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.86.0_octopus_recovery_stable-channel_mp-v31.bin.zip" -O recovery.zip
+          unzip recovery.zip
+          ls *.bin
+
+      - name: Clone RecoMod
+        run: |
+          git clone https://github.com/MercuryWorkshop/RecoMod
+          chmod +x RecoMod/recomod.sh
+
+      - name: Run RecoMod
+        run: |
+          BIN=$(ls *.bin)
+          sudo ./RecoMod/recomod.sh -i "$BIN" --halcyon --rw_legacy
+
+      - name: Upload modified image
+        uses: actions/upload-artifact@v4
+        with:
+          name: recomod-halcyon-image
+          path: "*.bin"
+          retention-days: 1

@@ -27,6 +27,8 @@ jobs:
       - name: Run RecoMod
         run: |
           BIN=$(ls *.bin)
+          mkdir -p RecoMod/lib
+          cp $(which pv) RecoMod/lib/pv
           sudo ./RecoMod/recomod.sh -i "$BIN" --halcyon --rw_legacy
 
       - name: Upload modified image
